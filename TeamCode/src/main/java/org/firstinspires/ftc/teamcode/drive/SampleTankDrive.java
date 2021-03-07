@@ -29,11 +29,15 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.teamcode.util.AxesSigns;
+import org.firstinspires.ftc.teamcode.util.BNO055IMUUtil;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 
@@ -55,6 +59,11 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
 
 /*
  * Simple tank drive hardware implementation for REV hardware.
+ * If using a tank drive, this needs to be referenced by all of the
+ * tuning opmodes. By default the tuning opmodes point to Mecanum out of the box
+ * Also, if you have a 2 motor tank, remove the second left and second right motors
+ * otherwise the non-existent motors return a speed of zero ticks/ sec and causes the speed
+ * to be cut in half. Presumably the ticks are averaged.
  */
 @Config
 public class SampleTankDrive extends TankDrive {
@@ -130,7 +139,7 @@ public class SampleTankDrive extends TankDrive {
 
         // TODO: if your hub is mounted vertically, remap the IMU axes so that the z-axis points
         // upward (normal to the floor) using a command like the following:
-        // BNO055IMUUtil.remapAxes(imu, AxesOrder.XYZ, AxesSigns.NPN);
+        //BNO055IMUUtil.remapAxes(imu, AxesOrder.XZY, AxesSigns.PNN);
 
         // add/remove motors depending on your robot (e.g., 6WD)
         DcMotorEx leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
@@ -140,7 +149,9 @@ public class SampleTankDrive extends TankDrive {
 
         motors = Arrays.asList(leftFront, rightFront);
         leftMotors = Arrays.asList(leftFront); // add second motor here if needed
-        rightMotors = Arrays.asList(rightFront);
+        rightMotors = Arrays.asList(rightFront);// but only use one per side if that is all you have
+        // otherwise it will average the ticks of the two encoders of which one will be zero
+        // and make you think the robot is only going half as fast
 
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
@@ -159,6 +170,9 @@ public class SampleTankDrive extends TankDrive {
         }
 
         // TODO: reverse any motors using DcMotor.setDirection()
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
+
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
