@@ -140,12 +140,13 @@ public class SampleTankDrive extends TankDrive {
         // TODO: if your hub is mounted vertically, remap the IMU axes so that the z-axis points
         // upward (normal to the floor) using a command like the following:
         //BNO055IMUUtil.remapAxes(imu, AxesOrder.XZY, AxesSigns.PNN);
+        BNO055IMUUtil.remapAxes(imu, AxesOrder.YXZ, AxesSigns.NPN); // UG Robot with Hub on its side
 
         // add/remove motors depending on your robot (e.g., 6WD)
-        DcMotorEx leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
+        DcMotorEx leftFront = hardwareMap.get(DcMotorEx.class, "Left_front");
         //DcMotorEx leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
         //DcMotorEx rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
-        DcMotorEx rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        DcMotorEx rightFront = hardwareMap.get(DcMotorEx.class, "Right_front");
 
         motors = Arrays.asList(leftFront, rightFront);
         leftMotors = Arrays.asList(leftFront); // add second motor here if needed
@@ -170,8 +171,8 @@ public class SampleTankDrive extends TankDrive {
         }
 
         // TODO: reverse any motors using DcMotor.setDirection()
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         // TODO: if desired, use setLocalizer() to change the localization method
