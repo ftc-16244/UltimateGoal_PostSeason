@@ -66,7 +66,7 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  * to be cut in half. Presumably the ticks are averaged.
  */
 @Config
-public class SampleTankDrive extends TankDrive {
+public class  SampleTankDrive extends TankDrive {
     public static PIDCoefficients AXIAL_PID = new PIDCoefficients(0, 0, 0);
     public static PIDCoefficients CROSS_TRACK_PID = new PIDCoefficients(0, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(6.95, 0, 0);
